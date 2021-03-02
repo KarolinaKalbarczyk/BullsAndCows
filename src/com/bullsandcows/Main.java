@@ -1,54 +1,43 @@
 package com.bullsandcows;
 
 import java.util.Scanner;
-import java.util.Random;
-import java.util.Arrays;
+import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
 
-        Random random = new Random();
+        System.out.println("How many digits should the random number contain?");
         Scanner scan = new Scanner(System.in);
+        int n = scan.nextInt();
 
-        int[] number = new int[4];
+        long pseudoRandomNumber = System.nanoTime();
 
-        //generating a guessable number
-        for (int i = 0; i < 4; i++) {
-            number[i] = random.nextInt(10);
+        String newS = Long.toString(pseudoRandomNumber);
+        String[] S = newS.split("");
+
+        LinkedHashSet<String> hs = new LinkedHashSet<String>();
+
+        for(int i = 0; i < S.length; i++){
+            hs.add(S[i]);
         }
 
-        System.out.println("Enter your 4-digit number:");
+        String[] linkedHashSetToArray = new String[hs.size()];
+        hs.toArray(linkedHashSetToArray);
 
-        //the user gives his number
-        String fromUser = scan.nextLine();
-        String[] s = fromUser.split("");
-        int[] user = new int[s.length];
-        for (int i = 0; i < s.length; i++) {
-            user[i] = Integer.parseInt(s[i]);
+        //the first digit cannot be zero
+        if(linkedHashSetToArray[0] == "0"){
+            String temp = linkedHashSetToArray[0];
+            linkedHashSetToArray[0] = linkedHashSetToArray[1];
+            linkedHashSetToArray[1] = temp;
         }
 
-        int cows = 0;
-        int bulls = 0;
+        String delimiter = "";
 
-        for (int i = 0; i < 4; i++) {
-            if (user[i] == number[i]) {
-                bulls++;
-            }
-            for (int j = i + 1; j < 4; j++) {
-                if (user[i] == number[j]) {
-                    cows++;
-                }
-            }
-        }
-
-        if (cows > 0 && bulls > 0) {
-            System.out.println("Grade: " + bulls + " bull(s) and " + cows + " cow(s). The secret code is " + Arrays.toString(number).replaceAll("[\\,\\[\\]\\ ]", ""));
-        } else if (cows > 0 && bulls == 0) {
-            System.out.println("Grade: " + cows + " cow(s). The secret code is " + Arrays.toString(number).replaceAll("[\\,\\[\\]\\ ]", ""));
-        } else if (cows == 0 && bulls > 0) {
-            System.out.println("Grade: " + bulls + " bull(s). The secret code is " + Arrays.toString(number).replaceAll("[\\,\\[\\]\\ ]", ""));
+        if(n < 10) {
+            System.out.println("The random secret number is " + String.join(delimiter, linkedHashSetToArray).substring(0,n) + ".");
         } else {
-            System.out.println("Grade: None. The secret code is " + Arrays.toString(number).replaceAll("[\\,\\[\\]\\ ]", ""));
+            System.out.println("Error: can't generate a secret number with a length of 11 because there aren't enough unique digits.");
         }
+
     }
 }
