@@ -1,4 +1,3 @@
-
 package com.bullsandcows;
 
 import java.util.Scanner;
@@ -11,29 +10,49 @@ public class Main {
         System.out.println("Please, enter the secret code's length:");
 
         Scanner scan = new Scanner(System.in);
-        int n = scan.nextInt();
+        String num = scan.nextLine();
 
-        if(n > 10 || n < 0){
-            System.out.println("Error: can't generate a secret number with a length of " + n + " because there aren't enough unique digits.");
+
+        if (!num.matches("[0-9]*")) {
+            System.out.println("Error: " + "\"" + num + "\" " + "isn't a valid number.");
+            System.exit(0);
+        }
+        else if (Integer.parseInt(num) > 36 || Integer.parseInt(num) < 1) {
+            System.out.println("Error: can't generate a secret number with a length of " + num + " because there aren't enough unique digits.");
             System.exit(0);
         }
 
+        int n =  Integer.parseInt(num);
         System.out.println("Input the number of possible symbols in the code:");
+        String em = scan.nextLine();
 
-        int m = scan.nextInt();
+        if (!em.matches("[0-9]*")) {
+            System.out.println("Error: " + "\"" + em + "\" " + "isn't a valid number.");
+            System.exit(0);
+        }
+
+        int m = Integer.parseInt(em);
+        if(Integer.parseInt(em) < Integer.parseInt(num)) {
+            System.out.println("Error: it's not possible to generate a code with a length of " + n + " with " + m + " unique symbols.");
+            System.exit(0);
+        }else if(Integer.parseInt(em) > 36){
+            System.out.println("Error: maximum number of possible symbols in the code is 36 (0-9, a-z).");
+            System.exit(0);
+        }
 
         //create new ArrayList
-        ArrayList<String> aList = new ArrayList<String>();
+        ArrayList<String> aListColors = new ArrayList<String>();
 
         String[] otherList = {"0","1","2","3","4","5","6","7","8","9","a","b","c","d","e","f","g","h","i","j","k","l","m","n","o","p","q","r","s","t","u","v","w","x","y","z"};
 
-        aList.addAll(Arrays.asList(otherList));
+
+        aListColors.addAll(Arrays.asList(otherList));
 
         String[] newS = new String[m];
 
         for(int i =0; i < m; i++){
             int randomIndex = (int) (Math.random() * m);
-            newS[i] = aList.get(randomIndex);
+            newS[i] = aListColors.get(randomIndex);
         }
 
         StringBuffer sb = new StringBuffer();
@@ -55,7 +74,7 @@ public class Main {
         hs.toArray(linkedHashSetToArray);
 
         String delimiter = "";
-        String result = String.join(delimiter, linkedHashSetToArray).substring(0,n); // tu n to dlugosc ciagu do zgadniecia zgloszona przez usera
+        String result = String.join(delimiter, linkedHashSetToArray).substring(0,n);
 
         String star = "*";
         String sign = star.repeat(n);
